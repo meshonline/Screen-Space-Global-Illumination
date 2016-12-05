@@ -1,9 +1,11 @@
 # Screen Space Global Illumination
 The idea is simple, to calculate full global illumination, the best way is to treat every pixel as a light source, we can accumulate lights from all pixels as global illumination for every pixel.
 
-Low resolution mode is the secret, I use a small screen of 8 x 8 pixels to calculate the full global illumination, the speed is so fast that it can run in realtime.
+Low resolution mode is the secret, I use a small screen of 8 x 8 pixels to calculate the full global illumination, all calculations are in GPU with a brief GLSL shader, the speed is so fast that it always runs in realtime.
 
 Finally, I blend the global illumination to the original viewport.
+
+That's all.
 
 This formula is used to calculate global illumination:
 
