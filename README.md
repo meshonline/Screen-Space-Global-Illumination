@@ -5,7 +5,7 @@ Low resolution mode is the secret, I use a small screen of 8 x 8 pixels to calcu
 
 Finally, I blend the global illumination to the original viewport.
 
-This formular is used to calculate global illumination:
+This formula is used to calculate global illumination:
 
 GI = lightColor * max(0, dot(lightNormal, lightToPixelNormal)) * max(0, dot(pixelNormal, pixelToLightNormal))
 
