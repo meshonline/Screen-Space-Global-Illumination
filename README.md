@@ -7,6 +7,8 @@ I use Urho3D game engine to test the effect, the resolution is 8 x 8, it can run
 
 ![SSGI Screenshot](http://www.mesh-online.net/ssgi-demo.jpg)
 
+Notice the color bleeding effect on the floor, the green curtain and the red cloth bled amazing colors on the floor, the wood floor also bled soft colors on the green curtain.
+
 ### TODO
 Fix some issues.
 
