@@ -5,7 +5,7 @@ GI = lightColor * max(0, dot(lightNormal, lightToPixelNormal)) * max(0, dot(pixe
 
 I use Urho3D game engine to test the effect, the resolution is 8 x 8, it can run in realtime!
 
-![SSGI Screenshot](http://www.mesh-online.net/ssgi-demo.jpg)
+![SSGI Screenshot](http://www.mesh-online.net/ssgi-demo-800x600.jpg)
 
 Notice the color bleeding effect on the floor, the green curtain and the red cloth bled amazing colors on the floor, the wood floor also bled soft colors on the green curtain.
 
