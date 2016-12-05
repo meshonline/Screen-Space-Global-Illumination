@@ -1,0 +1,24 @@
+<renderpath>
+    <command type="clear" color="fog" depth="1.0" stencil="0" />
+    <command type="scenepass" pass="base" vertexlights="true" metadata="base" />
+    <command type="forwardlights" pass="light" />
+    <command type="scenepass" pass="postopaque" />
+    <command type="scenepass" pass="refract">
+        <texture unit="environment" name="viewport" />
+    </command>
+    <command type="scenepass" pass="alpha" vertexlights="true" sort="backtofront" metadata="alpha" />
+    <command type="scenepass" pass="postalpha" sort="backtofront" />
+    <rendertarget name="depth" sizedivisor="1 1" format="lineardepth" />
+    <command type="clear" color="1 1 1 1" depth="1.0" stencil="0" output="depth" />
+    <command type="scenepass" pass="depth" output="depth" />
+    <rendertarget name="fullscreen" size="8 8" format="rgb" filter="true" />
+    <command type="quad" tag="SSGI" vs="SSGIForward" ps="SSGIForward" output="fullscreen">
+        <texture unit="diffuse" name="viewport" />
+        <texture unit="depth" name="depth" />
+    </command>
+    <command type="quad" tag="Bloom" vs="Bloom" ps="Bloom" psdefines="COMBINE" output="viewport">
+        <parameter name="BloomMix" value="1.0 1.0" />
+        <texture unit="diffuse" name="viewport" />
+        <texture unit="normal" name="fullscreen" />
+    </command>
+</renderpath>
