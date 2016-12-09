@@ -26,12 +26,12 @@ vec3 normal_from_depth(vec2 texcoords) {
     const vec2 offset2 = vec2(0.001, 0.0);
     
     // Fetch depth from depth buffer
-    float depth = DecodeDepth(texture2D(sDepthBuffer, texcoords).rgb);
-    float depth1 = DecodeDepth(texture2D(sDepthBuffer, texcoords + offset1).rgb);
-    float depth2 = DecodeDepth(texture2D(sDepthBuffer, texcoords + offset2).rgb);
+    float depth = DecodeDepth(texture2D(sEmissiveMap, texcoords).rgb);
+    float depth1 = DecodeDepth(texture2D(sEmissiveMap, texcoords + offset1).rgb);
+    float depth2 = DecodeDepth(texture2D(sEmissiveMap, texcoords + offset2).rgb);
     
-    vec3 p1 = vec3(offset1, depth1 - depth);
-    vec3 p2 = vec3(offset2, depth2 - depth);
+    highp vec3 p1 = vec3(offset1, depth1 - depth);
+    highp vec3 p2 = vec3(offset2, depth2 - depth);
     
     // Calculate normal
     highp vec3 normal = cross(p1, p2);
@@ -42,8 +42,8 @@ vec3 normal_from_depth(vec2 texcoords) {
 
 vec3 normal_from_pixels(vec2 texcoords1, vec2 texcoords2, out float dist) {
     // Fetch depth from depth buffer
-    float depth1 = DecodeDepth(texture2D(sDepthBuffer, texcoords1).rgb);
-    float depth2 = DecodeDepth(texture2D(sDepthBuffer, texcoords2).rgb);
+    float depth1 = DecodeDepth(texture2D(sEmissiveMap, texcoords1).rgb);
+    float depth2 = DecodeDepth(texture2D(sEmissiveMap, texcoords2).rgb);
     
     // Calculate normal
     highp vec3 normal = vec3(texcoords2 - texcoords1, depth2 - depth1);
