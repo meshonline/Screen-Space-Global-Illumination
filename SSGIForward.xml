@@ -30,7 +30,7 @@
     <rendertarget name="globalillumination" size="32 32" format="rgb" filter="true" />
     <command type="quad" tag="SSGI" vs="SSGIForward" ps="SSGIForward" output="globalillumination">
         <texture unit="diffuse" name="viewport" />
-        <texture unit="depth" name="blurv" />
+        <texture unit="emissive" name="blurv" />
     </command>
     <!-- Blur global illumination -->
     <rendertarget name="blurv2" tag="Bloom" size="32 32" format="rgb" filter="true" />
