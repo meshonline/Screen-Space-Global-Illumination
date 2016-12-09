@@ -19,6 +19,7 @@ Notice the color bleeding effect on the floor, the green curtain and the red clo
 
 ### TODO
 This is just an experiment, there are a few issues to be fixed.
+
 Edit: I have improved the algorithm by adding blur pass and calculating GI by distance, the GI looks more naturally now.
 
 ### License
