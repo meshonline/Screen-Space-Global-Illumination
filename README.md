@@ -20,6 +20,16 @@ GI = lightColor * max(0, dot(lightNormal, lightToPixelNormal)) * max(0, dot(pixe
 
 It is a simplified version of physics based global illumination.
 
+To lighten the background, I notice that rim pixels can emit lights to side, back and front, so we can treat rim pixels as point lights, the background can receive lights from rim pixels.
+
+The enhanced version is:
+
+GI = lightColor * mix(dot(lightNormal, lightToPixelNormal), 0.5, rim) * max(0, dot(pixelNormal, pixelToLightNormal)) / Distance
+
+Where rim is:
+
+rim = 1.0 - abs(dot(lightNormal, vec3(0, 0, 1)))
+
 ### Screenshot
 I use Urho3D game engine to test the effect, here is a screenshot:
 
