@@ -1,4 +1,6 @@
 # Screen Space Global Illumination
+
+### Introduction
 The idea is simple, we sample some pixels from screen space as independent light sources, the light directions are their screen space normals, then we accumulate lights from them as global illumination for every pixel.
 
 Because we are working in screen space, it support any light types and any number of lights.
