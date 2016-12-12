@@ -24,11 +24,11 @@ To lighten the background, I notice that rim pixels can emit lights to side, bac
 
 The enhanced version is:
 
-GI = lightColor * mix(dot(lightNormal, lightToPixelNormal), 0.5, rim) * max(0, dot(pixelNormal, pixelToLightNormal)) / Distance
+GI = lightColor * mix(dot(lightNormal, lightToPixelNormal), 0.5, Rim) * max(0, dot(pixelNormal, pixelToLightNormal)) / Distance;
 
-Where rim is:
+Where Rim is:
 
-rim = 1.0 - abs(dot(lightNormal, vec3(0, 0, 1)))
+Rim = 1.0 - abs(dot(lightNormal, vec3(0, 0, 1)));
 
 ### Screenshot
 I use Urho3D game engine to test the effect, here is a screenshot:
