@@ -6,7 +6,7 @@ Because we are working in screen space, it support any light types and any numbe
 
 Low resolution mode is where the magic is, I use small quads (32x32 pixels) to calculate global illumination, and sample in uniform grids of coordinates, since all calculations are in GPU, the speed is so fast that it always runs in realtime.
 
-I also use blur passes to smooth the small depth quad, the small viewport quad and the small global illumination quad, the lighting looks more smoothly than ever.
+I also use blur passes to smooth the small depth quad, the small viewport quad and the small global illumination quad, the lighting looks much smoother than ever.
 
 Finally, I blend the global illumination to the original viewport.
 
