@@ -72,7 +72,8 @@ vec3 Calculate_GI(vec3 pixel_normal, vec2 coord)
     pixel_to_light_normal = -light_to_pixel_normal;
     
     // Calculate GI
-    vec3 gi = light_color * max(0.0, dot(light_normal, light_to_pixel_normal)) * max(0.0, dot(pixel_normal, pixel_to_light_normal)) / dist;
+    float rim = 1.0 - abs(dot(light_normal, vec3(0.0, 0.0, 1.0)));
+    vec3 gi = light_color * mix(dot(light_normal, light_to_pixel_normal), 0.5, rim) * max(0.0, dot(pixel_normal, pixel_to_light_normal)) / dist;
     
     return gi;
 }
