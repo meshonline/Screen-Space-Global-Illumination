@@ -26,18 +26,12 @@
     <command type="quad" tag="Bloom" vs="Bloom" ps="Bloom" psdefines="BLURV" output="blurv">
         <texture unit="diffuse" name="blurh" />
     </command>
-    <!-- Render global illumination -->
-    <rendertarget name="globalillumination" size="32 32" format="rgb" filter="true" />
-    <command type="quad" tag="SSGI" vs="SSGIForward" ps="SSGIForward" output="globalillumination">
-        <texture unit="diffuse" name="viewport" />
-        <texture unit="emissive" name="blurv" />
-    </command>
-    <!-- Blur global illumination -->
+    <!-- Blur viewport buffer -->
     <rendertarget name="blurv2" tag="Bloom" size="32 32" format="rgb" filter="true" />
     <rendertarget name="blurh2" tag="Bloom" size="32 32" format="rgb" filter="true" />
     <command type="quad" tag="Bloom" vs="Bloom" ps="Bloom" psdefines="BRIGHT" output="blurv2">
         <parameter name="BloomThreshold" value="0.0" />
-        <texture unit="diffuse" name="globalillumination" />
+        <texture unit="diffuse" name="viewport" />
     </command>
     <command type="quad" tag="Bloom" vs="Bloom" ps="Bloom" psdefines="BLURH" output="blurh2">
         <texture unit="diffuse" name="blurv2" />
@@ -45,11 +39,30 @@
     <command type="quad" tag="Bloom" vs="Bloom" ps="Bloom" psdefines="BLURV" output="blurv2">
         <texture unit="diffuse" name="blurh2" />
     </command>
+    <!-- Render global illumination -->
+    <rendertarget name="globalillumination" size="32 32" format="rgb" filter="true" />
+    <command type="quad" tag="SSGI" vs="SSGIForward" ps="SSGIForward" output="globalillumination">
+        <texture unit="diffuse" name="blurv2" />
+        <texture unit="emissive" name="blurv" />
+    </command>
+    <!-- Blur global illumination -->
+    <rendertarget name="blurv3" tag="Bloom" size="32 32" format="rgb" filter="true" />
+    <rendertarget name="blurh3" tag="Bloom" size="32 32" format="rgb" filter="true" />
+    <command type="quad" tag="Bloom" vs="Bloom" ps="Bloom" psdefines="BRIGHT" output="blurv3">
+        <parameter name="BloomThreshold" value="0.0" />
+        <texture unit="diffuse" name="globalillumination" />
+    </command>
+    <command type="quad" tag="Bloom" vs="Bloom" ps="Bloom" psdefines="BLURH" output="blurh3">
+        <texture unit="diffuse" name="blurv3" />
+    </command>
+    <command type="quad" tag="Bloom" vs="Bloom" ps="Bloom" psdefines="BLURV" output="blurv3">
+        <texture unit="diffuse" name="blurh3" />
+    </command>
     <!-- Blend global illumination -->
     <command type="quad" tag="Bloom" vs="Bloom" ps="Bloom" psdefines="COMBINE" output="viewport">
         <parameter name="BloomMix" value="1.0 1.0" />
         <texture unit="diffuse" name="viewport" />
-        <texture unit="normal" name="blurv2" />
+        <texture unit="normal" name="blurv3" />
     </command>
     <!-- SSGI End -->
 </renderpath>
