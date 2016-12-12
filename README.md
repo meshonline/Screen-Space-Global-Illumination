@@ -3,7 +3,7 @@ The idea is simple, we sample some pixels from screen space as independent light
 
 Because we are working in screen space, it support any light types and any number of lights.
 
-Low resolution mode is the where the magic is, I use small quads (32x32 pixels) to calculate global illumination, and sample in uniform grids of coordinates, since all calculations are in GPU, the speed is so fast that it always runs in realtime.
+Low resolution mode is where the magic is, I use small quads (32x32 pixels) to calculate global illumination, and sample in uniform grids of coordinates, since all calculations are in GPU, the speed is so fast that it always runs in realtime.
 
 I also use blur passes to smooth the small depth quad, the small viewport quad and the small global illumination quad, the lighting looks more smoothly than ever.
 
