@@ -21,9 +21,9 @@ void VS()
 #ifdef COMPILEPS
 
 vec3 normal_from_depth(vec2 texcoords) {
-    // Delta coordinate of one pixel: 0.001 = 1 (pixel) / 1000 (pixels)
-    const vec2 offset1 = vec2(0.0, 0.001);
-    const vec2 offset2 = vec2(0.001, 0.0);
+    // Delta coordinate of 5 pixels: 0.005 = 5 (pixel) / 1000 (pixels)
+    const vec2 offset1 = vec2(0.0, 0.005);
+    const vec2 offset2 = vec2(0.005, 0.0);
     
     // Fetch depth from depth buffer
     float depth = DecodeDepth(texture2D(sEmissiveMap, texcoords).rgb);
@@ -48,10 +48,10 @@ vec3 normal_from_pixels(vec2 texcoords1, vec2 texcoords2, out float dist) {
     // Calculate normal
     highp vec3 normal = vec3(texcoords2 - texcoords1, depth2 - depth1);
     normal.z = -normal.z;
-
+    
     // Calculate distance between texcoords
     dist = length(normal);
-
+    
     return normalize(normal);
 }
 
@@ -61,7 +61,7 @@ vec3 Calculate_GI(vec3 pixel_normal, vec2 coord)
     vec3 pixel_to_light_normal;
     vec3 light_normal, light_to_pixel_normal;
     float dist;
-
+    
     // Get the pixel color
     light_color = texture2D(sDiffMap, coord).rgb;
     // Calculate normal for the pixel
@@ -70,7 +70,7 @@ vec3 Calculate_GI(vec3 pixel_normal, vec2 coord)
     light_to_pixel_normal = normal_from_pixels(coord, vScreenPos, dist);
     // Calculate normal from current pixel to the pixel
     pixel_to_light_normal = -light_to_pixel_normal;
-
+    
     // Calculate GI
     vec3 gi = light_color * max(0.0, dot(light_normal, light_to_pixel_normal)) * max(0.0, dot(pixel_normal, pixel_to_light_normal)) / dist;
     
@@ -79,23 +79,24 @@ vec3 Calculate_GI(vec3 pixel_normal, vec2 coord)
 
 void PS()
 {
+    const int GRID_COUNT = 9;
     vec3 pixel_normal;
     vec3 gi;
-
+    
     // Calculate normal for current pixel
     pixel_normal = normal_from_depth(vScreenPos);
     // Prepare to accumulate GI
     gi = vec3(0.0);
- 
+    
     // Accumulate GI from some uniform samples
-    for (int y=0; y<16; ++y) {
-        for (int x=0; x<16; ++x) {
-            gi += Calculate_GI(pixel_normal, vec2((float(x)+0.5)/16.0, (float(y)+0.5)/16.0));
+    for (int y = 0; y < GRID_COUNT; ++y) {
+        for (int x = 0; x < GRID_COUNT; ++x) {
+            gi += Calculate_GI(pixel_normal, vec2((float(x) + 0.5) / float(GRID_COUNT), (float(y) + 0.5) / float(GRID_COUNT)));
         }
     }
     
     // Make GI not too strong
-    gi /= 64.0;
+    gi /= float(GRID_COUNT * GRID_COUNT / 3);
     
     gl_FragColor = vec4(gi, 1.0);
 }
