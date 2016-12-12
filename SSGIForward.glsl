@@ -21,9 +21,9 @@ void VS()
 #ifdef COMPILEPS
 
 vec3 normal_from_depth(vec2 texcoords) {
-    // Delta coordinate of 5 pixels: 0.005 = 5 (pixel) / 1000 (pixels)
-    const vec2 offset1 = vec2(0.0, 0.005);
-    const vec2 offset2 = vec2(0.005, 0.0);
+    // Delta coordinate of 1 pixel: 0.03125 = 1 (pixel) / 32 (pixels)
+    const vec2 offset1 = vec2(0.0, 0.03125);
+    const vec2 offset2 = vec2(0.03125, 0.0);
     
     // Fetch depth from depth buffer
     float depth = DecodeDepth(texture2D(sEmissiveMap, texcoords).rgb);
