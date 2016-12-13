@@ -25,6 +25,7 @@ It is a simplified version of physics based global illumination.
 ### Screenshot
 I use Urho3D game engine to test the effect, here is a screenshot:
 
+![ssgi.jpg](http://www.mesh-online.net/ssgi.jpg)
 
 Notice the color bleeding effect on the floor, the green curtain and the red cloth bled amazing colors on the floor, and the wood floor also bled soft colors on the green curtain.
 
