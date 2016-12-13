@@ -20,15 +20,15 @@ void VS()
 
 #ifdef COMPILEPS
 
-vec3 normal_from_depth(vec2 texcoords) {
+vec3 normal_from_depth(sampler2D tex, vec2 texcoords) {
     // Delta coordinate of 1 pixel: 0.03125 = 1 (pixel) / 32 (pixels)
     const vec2 offset1 = vec2(0.0, 0.03125);
     const vec2 offset2 = vec2(0.03125, 0.0);
     
     // Fetch depth from depth buffer
-    float depth = DecodeDepth(texture2D(sEmissiveMap, texcoords).rgb);
-    float depth1 = DecodeDepth(texture2D(sEmissiveMap, texcoords + offset1).rgb);
-    float depth2 = DecodeDepth(texture2D(sEmissiveMap, texcoords + offset2).rgb);
+    float depth = DecodeDepth(texture2D(tex, texcoords).rgb);
+    float depth1 = DecodeDepth(texture2D(tex, texcoords + offset1).rgb);
+    float depth2 = DecodeDepth(texture2D(tex, texcoords + offset2).rgb);
     
     highp vec3 p1 = vec3(offset1, depth1 - depth);
     highp vec3 p2 = vec3(offset2, depth2 - depth);
@@ -40,10 +40,10 @@ vec3 normal_from_depth(vec2 texcoords) {
     return normalize(normal);
 }
 
-vec3 normal_from_pixels(vec2 texcoords1, vec2 texcoords2, out float dist) {
+vec3 normal_from_pixels(sampler2D tex, vec2 texcoords1, vec2 texcoords2, out float dist) {
     // Fetch depth from depth buffer
-    float depth1 = DecodeDepth(texture2D(sEmissiveMap, texcoords1).rgb);
-    float depth2 = DecodeDepth(texture2D(sEmissiveMap, texcoords2).rgb);
+    float depth1 = DecodeDepth(texture2D(tex, texcoords1).rgb);
+    float depth2 = DecodeDepth(texture2D(tex, texcoords2).rgb);
     
     // Calculate normal
     highp vec3 normal = vec3(texcoords2 - texcoords1, depth2 - depth1);
@@ -61,19 +61,32 @@ vec3 Calculate_GI(vec3 pixel_normal, vec2 coord)
     vec3 pixel_to_light_normal;
     vec3 light_normal, light_to_pixel_normal;
     float dist;
+    float pixel_to_light_dot;
+    vec3 gi = vec3(0.0);
+    
+    // Calculate normal from the pixel to current pixel
+    light_to_pixel_normal = normal_from_pixels(sEmissiveMap, coord, vScreenPos, dist);
+    // Calculate normal from current pixel to the pixel
+    pixel_to_light_normal = -light_to_pixel_normal;
+    // Calculate dot product from current pixel to the pixel
+    pixel_to_light_dot = max(0.0, dot(pixel_normal, pixel_to_light_normal));
     
     // Get the pixel color
     light_color = texture2D(sDiffMap, coord).rgb;
     // Calculate normal for the pixel
-    light_normal = normal_from_depth(coord);
-    // Calculate normal from the pixel to current pixel
-    light_to_pixel_normal = normal_from_pixels(coord, vScreenPos, dist);
-    // Calculate normal from current pixel to the pixel
-    pixel_to_light_normal = -light_to_pixel_normal;
+    light_normal = normal_from_depth(sEmissiveMap, coord);
+    // Calculate GI
+    gi += light_color * max(0.0, dot(light_normal, light_to_pixel_normal)) * pixel_to_light_dot / dist;
+    
+    // Get the cull pixel color, base color need to be lighten to simulate direct light effect.
+    light_color = texture2D(sEnvMap, coord).rgb * 8.0;
+    // Calculate normal for the cull pixel
+    light_normal = normal_from_depth(sNormalMap, coord);
+    // Flip the normal
+    light_normal = -light_normal;
     
     // Calculate GI
-    float rim = 1.0 - abs(dot(light_normal, vec3(0.0, 0.0, 1.0)));
-    vec3 gi = light_color * mix(dot(light_normal, light_to_pixel_normal), 0.5, rim) * max(0.0, dot(pixel_normal, pixel_to_light_normal)) / dist;
+    gi += light_color * max(0.0, dot(light_normal, light_to_pixel_normal)) * pixel_to_light_dot / dist;
     
     return gi;
 }
@@ -85,7 +98,7 @@ void PS()
     vec3 gi;
     
     // Calculate normal for current pixel
-    pixel_normal = normal_from_depth(vScreenPos);
+    pixel_normal = normal_from_depth(sEmissiveMap, vScreenPos);
     // Prepare to accumulate GI
     gi = vec3(0.0);
     
