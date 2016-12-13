@@ -43,7 +43,7 @@ vec3 normal_from_depth(sampler2D tex, vec2 texcoords) {
 vec3 normal_from_pixels(sampler2D tex, vec2 texcoords1, vec2 texcoords2, out float dist) {
     // Fetch depth from depth buffer
     float depth1 = DecodeDepth(texture2D(tex, texcoords1).rgb);
-    float depth2 = DecodeDepth(texture2D(tex, texcoords2).rgb);
+    float depth2 = DecodeDepth(texture2D(sEmissiveMap, texcoords2).rgb);
     
     // Calculate normal
     highp vec3 normal = vec3(texcoords2 - texcoords1, depth2 - depth1);
@@ -61,32 +61,34 @@ vec3 Calculate_GI(vec3 pixel_normal, vec2 coord)
     vec3 pixel_to_light_normal;
     vec3 light_normal, light_to_pixel_normal;
     float dist;
-    float pixel_to_light_dot;
     vec3 gi = vec3(0.0);
     
     // Calculate normal from the pixel to current pixel
     light_to_pixel_normal = normal_from_pixels(sEmissiveMap, coord, vScreenPos, dist);
     // Calculate normal from current pixel to the pixel
     pixel_to_light_normal = -light_to_pixel_normal;
-    // Calculate dot product from current pixel to the pixel
-    pixel_to_light_dot = max(0.0, dot(pixel_normal, pixel_to_light_normal));
     
     // Get the pixel color
     light_color = texture2D(sDiffMap, coord).rgb;
     // Calculate normal for the pixel
     light_normal = normal_from_depth(sEmissiveMap, coord);
     // Calculate GI
-    gi += light_color * max(0.0, dot(light_normal, light_to_pixel_normal)) * pixel_to_light_dot / dist;
+    gi += light_color * max(0.0, dot(light_normal, light_to_pixel_normal)) * max(0.0, dot(pixel_normal, pixel_to_light_normal)) / dist;
+    
+    // Calculate normal from the pixel to current pixel
+    light_to_pixel_normal = normal_from_pixels(sNormalMap, coord, vScreenPos, dist);
+    // Calculate normal from current pixel to the pixel
+    pixel_to_light_normal = -light_to_pixel_normal;
     
     // Get the cull pixel color, base color need to be lighten to simulate direct light effect.
-    light_color = texture2D(sEnvMap, coord).rgb * 8.0;
+    light_color = texture2D(sEnvMap, coord).rgb * 5.0;
     // Calculate normal for the cull pixel
     light_normal = normal_from_depth(sNormalMap, coord);
     // Flip the normal
     light_normal = -light_normal;
     
     // Calculate GI
-    gi += light_color * max(0.0, dot(light_normal, light_to_pixel_normal)) * pixel_to_light_dot / dist;
+    gi += light_color * max(0.0, dot(light_normal, light_to_pixel_normal)) * max(0.0, dot(pixel_normal, pixel_to_light_normal)) / dist;
     
     return gi;
 }
