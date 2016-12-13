@@ -75,9 +75,9 @@ vec3 Calculate_GI(vec3 pixel_normal, vec2 coord)
     // Calculate GI
     gi += light_color * max(0.0, dot(light_normal, light_to_pixel_normal)) * max(0.0, dot(pixel_normal, pixel_to_light_normal)) / dist;
     
-    // Calculate normal from the pixel to current pixel
+    // Calculate normal from the cull pixel to current pixel
     light_to_pixel_normal = normal_from_pixels(sNormalMap, coord, vScreenPos, dist);
-    // Calculate normal from current pixel to the pixel
+    // Calculate normal from current pixel to the cull pixel
     pixel_to_light_normal = -light_to_pixel_normal;
     
     // Get the cull pixel color, base color need to be lighten to simulate direct light effect.
@@ -112,7 +112,7 @@ void PS()
     }
     
     // Make GI not too strong
-    gi /= float(GRID_COUNT * GRID_COUNT / 3);
+    gi /= float(GRID_COUNT * GRID_COUNT / 2);
     
     gl_FragColor = vec4(gi, 1.0);
 }
