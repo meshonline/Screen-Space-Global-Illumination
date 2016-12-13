@@ -8,7 +8,7 @@ Low resolution mode is where the magic is, I use small quads (32x32 pixels) to c
 
 To lighten the background, I render the depth buffer and the viewport buffer with front face culling mode, only back faces are rendered, then flip its normal to get correct normal.
 
-I also use one blur passes to smooth the global illumination quad, the lighting looks much smoother.
+I also use one blur pass to smooth the global illumination quad, the lighting looks much smoother than ever.
 
 Finally, I blend the global illumination to the original viewport.
 
@@ -25,7 +25,6 @@ It is a simplified version of physics based global illumination.
 ### Screenshot
 I use Urho3D game engine to test the effect, here is a screenshot:
 
-![ssgi.jpg](http://www.mesh-online.net/ssgi.jpg)
 
 Notice the color bleeding effect on the floor, the green curtain and the red cloth bled amazing colors on the floor, and the wood floor also bled soft colors on the green curtain.
 
