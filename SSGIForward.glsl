@@ -95,7 +95,7 @@ vec3 Calculate_GI(vec3 pixel_normal, vec2 coord)
 
 void PS()
 {
-    const int GRID_COUNT = 9;
+    const int GRID_COUNT = 16;
     vec3 pixel_normal;
     vec3 gi;
     
@@ -112,7 +112,7 @@ void PS()
     }
     
     // Make GI not too strong
-    gi /= float(GRID_COUNT * GRID_COUNT / 2);
+    gi /= float(GRID_COUNT * GRID_COUNT / 3);
     
     gl_FragColor = vec4(gi, 1.0);
 }
