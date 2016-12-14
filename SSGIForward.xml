@@ -1,5 +1,5 @@
 <renderpath>
-    <!-- Render viewport -->
+    <!-- Render viewport buffer -->
     <command type="clear" color="fog" depth="1.0" stencil="0" />
     <command type="scenepass" pass="base" vertexlights="true" metadata="base" />
     <command type="forwardlights" pass="light" />
@@ -9,18 +9,19 @@
     </command>
     <command type="scenepass" pass="alpha" vertexlights="true" sort="backtofront" metadata="alpha" />
     <command type="scenepass" pass="postalpha" sort="backtofront" />
-    <!-- Render cull viewport buffer and cull depth buffer -->
-    <rendertarget name="cullviewport" tag="Bloom" size="32 32" format="rgb" filter="true" />
-    <command type="clear" color="fog" depth="0.0" stencil="0" output="cullviewport" />
-    <command type="scenepass" pass="cullbase" vertexlights="true" metadata="base" output="cullviewport" />
-    <rendertarget name="culldepth" size="32 32" format="lineardepth" filter="true" />
-    <command type="clear" color="1 1 1 1" depth="0.0" stencil="0" output="culldepth" />
-    <command type="scenepass" pass="culldepth" output="culldepth" />
     <!-- Render depth buffer -->
     <rendertarget name="depth" size="32 32" format="lineardepth" filter="true" />
     <command type="clear" color="1 1 1 1" depth="1.0" stencil="0" output="depth" />
     <command type="scenepass" pass="depth" output="depth" />
-    <!-- Render global illumination -->
+    <!-- Render cull viewport buffer -->
+    <rendertarget name="cullviewport" tag="Bloom" size="32 32" format="rgb" filter="true" />
+    <command type="clear" color="fog" depth="0.0" stencil="0" output="cullviewport" />
+    <command type="scenepass" pass="cullbase" vertexlights="true" metadata="base" output="cullviewport" />
+    <!-- Render cull depth buffer -->
+    <rendertarget name="culldepth" size="32 32" format="lineardepth" filter="true" />
+    <command type="clear" color="1 1 1 1" depth="0.0" stencil="0" output="culldepth" />
+    <command type="scenepass" pass="culldepth" output="culldepth" />
+    <!-- Render global illumination buffer -->
     <rendertarget name="globalillumination" size="32 32" format="rgb" filter="true" />
     <command type="quad" tag="SSGI" vs="SSGIForward" ps="SSGIForward" output="globalillumination">
         <texture unit="diffuse" name="viewport" />
@@ -28,7 +29,7 @@
         <texture unit="environment" name="cullviewport" />
         <texture unit="normal" name="culldepth" />
     </command>
-    <!-- Blur global illumination -->
+    <!-- Blur global illumination buffer -->
     <rendertarget name="blurv" tag="Bloom" size="32 32" format="rgb" filter="true" />
     <rendertarget name="blurh" tag="Bloom" size="32 32" format="rgb" filter="true" />
     <command type="quad" tag="Bloom" vs="Bloom" ps="Bloom" psdefines="BRIGHT" output="blurv">
@@ -41,7 +42,7 @@
     <command type="quad" tag="Bloom" vs="Bloom" ps="Bloom" psdefines="BLURV" output="blurv">
         <texture unit="diffuse" name="blurh" />
     </command>
-    <!-- Blend global illumination -->
+    <!-- Blend global illumination buffer onto viewport buffer -->
     <command type="quad" tag="Bloom" vs="Bloom" ps="Bloom" psdefines="COMBINE" output="viewport">
         <parameter name="BloomMix" value="1.0 1.0" />
         <texture unit="diffuse" name="viewport" />
