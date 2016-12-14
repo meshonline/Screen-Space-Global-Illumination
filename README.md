@@ -1,20 +1,20 @@
 # Screen Space Global Illumination
 ### Introduction
-The idea is simple, we sample some pixels from screen space as independent light sources, the light directions are their screen space normals, then we accumulate lights from them as global illumination for every pixel.
+The idea is simple, we sample some pixels from screen space as independent light sources, the light positions are their screen space positions, the light directions are their screen space normals, then we accumulate lights from them as global illumination for every pixel.
 
-Because we are working in screen space, it support any light types and any number of lights.
+Because we are working in screen space, it supports any light types and any light counts.
 
-Low resolution mode is where the magic is, I use small quads (32x32 pixels) to calculate global illumination, and sample in uniform grids of coordinates, since all calculations are in GPU, the speed is so fast that it always runs in realtime.
+Low resolution mode is where the magic is, I use small quads (32x32 pixels) to calculate global illumination, and sample in uniform grids (16x16) of coordinates, since all calculations are in GPU, the speed is so fast that it always runs in realtime.
 
-To lighten the background, I render the depth buffer and the viewport buffer with front face culling mode, only back faces are rendered, then flip its normal to get correct normal.
+Screen space normal does not point to back, to lighten the back objects, I rendered another viewport buffer with front face culling mode, so only back faces are rendered, then I flip their normals to let them point to back.
 
-I also use one blur pass to smooth the global illumination quad, the lighting looks much smoother than ever.
+I also use one blur pass to smooth the global illumination buffer, the lighting looks much smoother.
 
-Finally, I blend the global illumination to the original viewport.
+Finally, I blend the global illumination buffer onto the original viewport buffer.
 
 That's all.
 
-It can run on both desktop and mobile devices in realtime now!
+The shader can run on both desktop and mobile devices in realtime.
 
 This formula is used to calculate global illumination:
 
@@ -27,7 +27,7 @@ I use Urho3D game engine to test the effect, here is a screenshot:
 
 ![ssgi.jpg](http://www.mesh-online.net/ssgi800x600.jpg)
 
-Notice the color bleeding effect on the floor, the green curtain and the red cloth bled amazing colors on the floor, and the wood floor also bled soft colors on the green curtain.
+The green curtain and the red cloth bled amazing colors on the floor, and the wooden floor and the red cloth bled soft colors on the green curtain.
 
 ### License
 The MIT License (MIT)
