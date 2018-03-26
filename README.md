@@ -22,13 +22,11 @@ GI = lightColor * max(0, dot(lightNormal, lightToPixelNormal)) * max(0, dot(pixe
 
 It is a simplified version of physics based global illumination.
 
-### SSGI Demo video clip
-I use Urho3D game engine to test the effect, click the image to watch SSGI demo video clip:<br/>
+### SSGI Demo
+I use Urho3D game engine to test the effect, click the image to watch SSGI demo:<br/>
 [![ssgi.jpg](http://www.mesh-online.net/ssgi800x600.jpg)](https://youtu.be/M9cXRAHMhXY "SSGI Demo")
 
-This SSGI demo video clip was captured from my iPad mini 2, the SSGI shader can run on mobile devices smoothly.
-
-The green curtain and the red cloth bled amazing colors on the floor, and the wooden floor and the red cloth bled soft colors on the green curtain.
+This SSGI demo was captured from my iPad mini 2, the SSGI shader can run smoothly on mobile devices. The green curtain and the red cloth bled amazing colors on the floor, and the wooden floor and the red cloth bled soft colors on the green curtain.
 
 ### License
 The MIT License (MIT)
